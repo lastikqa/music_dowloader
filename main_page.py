@@ -7,13 +7,16 @@ def main(page : ft.Page):
 
 
     def parsing(e):
+        container = ft.Container
         parser.browser_search(user_search=user_search.value)
         music_dict = parser.browser_get()
         musics = [(ft.Row([ft.IconButton(ft.icons.PLAY_CIRCLE_OUTLINED), ft.IconButton(ft.icons.DOWNLOADING),
                              ft.Text(f"{i}")])) for i in music_dict]
-        cl.controls.extend(musics)
 
-        page.add(ft.Container(cl, border=ft.border.all(1)))
+        page.update()
+        cl.controls.extend(musics)
+        
+        page.add(container(cl, border=ft.border.all(1)))
 
         page.update()
 

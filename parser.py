@@ -19,26 +19,27 @@ class MusicParser:
         self.browser_go()
 
         search_field = self.browser.find_element(By.XPATH, "//input[@type='search']")
-
         search_field.send_keys(user_search)
+
         search_button = self.browser.find_element(By.XPATH, "//div/button[@type='submit']").click()
 
     def browser_get(self):
+        try:
+            authors = self.browser.find_elements(By.XPATH, Selectors.author_name)
+            author_names = [author.text for author in authors]
 
-        authors = self.browser.find_elements(By.XPATH, Selectors.author_name)
-        author_names = [author.text for author in authors]
+            tracks = self.browser.find_elements(By.XPATH, Selectors.track_name)
+            track_names = [track.text for track in tracks]
 
-        tracks = self.browser.find_elements(By.XPATH, Selectors.track_name)
-        track_names = [track.text for track in tracks]
+            completed_tracks = list(zip(author_names,track_names))
+            completed_tracks = [i[0]+' - '+i[1] for i in completed_tracks]
 
-        completed_tracks = list(zip(author_names,track_names))
-        completed_tracks = [i[0]+' - '+i[1] for i in completed_tracks]
+            raw_tracks_urls = self.browser.find_elements(By.XPATH, Selectors.track_url_xpath)
+            tracks_urls = [track_url.get_dom_attribute(Selectors.track_attribute) for track_url in raw_tracks_urls]
 
-        raw_tracks_urls = self.browser.find_elements(By.XPATH, Selectors.track_url_xpath)
-        tracks_urls = [track_url.get_dom_attribute(Selectors.track_attribute) for track_url in raw_tracks_urls]
-
-        music_dict = dict(zip(completed_tracks,tracks_urls))
-
+            music_dict = dict(zip(completed_tracks,tracks_urls))
+        finally:
+            self.browser.quit()
         return music_dict
 
 
