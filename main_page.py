@@ -1,7 +1,27 @@
 import flet as ft
-
+from parser import MusicParser
 
 def main(page : ft.Page):
+    parser = MusicParser()
+    page.title = "Music Downloader"
+
+
+    def parsing(e):
+        parser.browser_search(user_search=user_search.value)
+        music_dict = parser.browser_get()
+        musics = [(ft.Row([ft.IconButton(ft.icons.PLAY_CIRCLE_OUTLINED), ft.IconButton(ft.icons.DOWNLOADING),
+                             ft.Text(f"{i}")])) for i in music_dict]
+        cl.controls.extend(musics)
+
+        page.add(ft.Container(cl, border=ft.border.all(1)))
+
+        page.update()
+
+    user_search = ft.TextField(label="Search your song", icon=ft.icons.SEARCH, on_submit=parsing)
+    page.add(user_search)
+
+
+
     page.theme = ft.Theme(
         scrollbar_theme=ft.ScrollbarTheme(
             track_color={
@@ -9,7 +29,7 @@ def main(page : ft.Page):
                 ft.ControlState.DEFAULT: ft.colors.TRANSPARENT,
             },
             track_visibility=True,
-            track_border_color=ft.colors.BLUE,
+            #track_border_color=ft.colors.BLUE,
             thumb_visibility=True,
             thumb_color={
                 ft.ControlState.HOVERED: ft.colors.RED,
@@ -17,8 +37,8 @@ def main(page : ft.Page):
             },
             thickness=30,
             radius=15,
-            main_axis_margin=5,
-            cross_axis_margin=10,
+            main_axis_margin=1,
+            cross_axis_margin=3,
             interactive=True,
         )
     )
@@ -29,19 +49,10 @@ def main(page : ft.Page):
         width=float("inf"),
         scroll=ft.ScrollMode.ALWAYS,
     )
-    page.add(ft.TextField("Search your song"), ft.IconButton(ft.icons.SEARCH))
 
-    page.title = "Music Downloader"
 
-    n = ft.Row([ft.IconButton(ft.icons.PLAY_CIRCLE_OUTLINED),ft.IconButton(ft.icons.DOWNLOADING),ft.Text("Music")])
-    m = []
-    for i in range(25):
-        m.append(n)
-    #page.add(*m)
 
-    for i in m:
-        cl.controls.append(i)
 
-    page.add(ft.Container(cl, border=ft.border.all(1)))
+
 
 ft.app(target=main)
