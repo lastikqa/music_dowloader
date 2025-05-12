@@ -1,3 +1,4 @@
+import click
 import flet as ft
 from parser import MusicParser
 
@@ -18,8 +19,8 @@ def main(page: ft.Page):
         parser.browser_search(user_search=user_search.value)
         parser.page_walking()
 
-        musics = [(ft.Row([ft.IconButton(ft.icons.PLAY_CIRCLE_OUTLINED),
-                           ft.IconButton(ft.icons.DOWNLOADING, data=i, on_click=click),
+        musics = [(ft.Row([ft.IconButton(ft.Icons.PLAY_CIRCLE_OUTLINED),
+                           ft.IconButton(ft.Icons.DOWNLOADING, data=i, on_click=click),
                   ft.Text(f"{i}")])) for i in parser.music_dict]
 
         cl.controls.extend(musics)
@@ -28,7 +29,7 @@ def main(page: ft.Page):
 
         page.update()
 
-    user_search = ft.TextField(label="Search your song", icon=ft.icons.SEARCH, on_submit=parsing)
+    user_search = ft.TextField(label="Search your song", icon=ft.Icons.SEARCH, on_submit=parsing)
     page.add(user_search)
 
 
