@@ -1,36 +1,27 @@
-import click
 import flet as ft
-from parser import MusicParser
+from search_field import SearchField
+from track_field import TrackField
+from player_buttons import PlayerButtons
+from music_player import MusicPlayer
+
+class MainPage:
+    def __init__(self, page, ft):
+        self.page = page
+        self.ft = ft
+        self.player = MusicPlayer()
+        self.search_field = SearchField(self.page, self.ft)
+        self.track_field = TrackField(self.page, self.ft)
+        self.search_field.track_field = self.track_field
+        self.player_buttons = PlayerButtons(self.page, self.ft)
+        self.track_field.player_buttons = self.player_buttons
+        self.track_field.player = self.player
+        self.player_buttons.player = self.player
+
+    async def build(self):
+        await self.search_field.setup_file_search_field()
 
 
-def main(page: ft.Page):
-
-    page.title = "Music Downloader"
-
-    def parsing(e):
-
-        cl = ft.Column(
-            spacing=1,
-            height=550,
-            width=float("inf"),
-            scroll=ft.ScrollMode.ALWAYS,
-        )
-        parser = MusicParser()
-        parser.browser_search(user_search=user_search.value)
-        parser.page_walking()
-
-        musics = [(ft.Row([ft.IconButton(ft.Icons.PLAY_CIRCLE_OUTLINED),
-                           ft.IconButton(ft.Icons.DOWNLOADING, data=i, on_click=click),
-                  ft.Text(f"{i}")])) for i in parser.music_dict]
-
-        cl.controls.extend(musics)
-
-        page.add(cl)
-
-        page.update()
-
-    user_search = ft.TextField(label="Search your song", icon=ft.Icons.SEARCH, on_submit=parsing)
-    page.add(user_search)
 
 
-ft.app(target=main)
+
+

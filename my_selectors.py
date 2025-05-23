@@ -1,6 +1,6 @@
 
 class Selectors:
-
+    url = 'https://muzofond.fm/'
     author_name = "//span[@class='artist']"
     track_name = "//span[@class='track']"
     track_url_xpath = "//div[@class='actions']/ul/li[@class='play']"
